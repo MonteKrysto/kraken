@@ -175,9 +175,12 @@
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-		VesselServiceProvider::class,
+		Vessel\VesselServiceProvider::class,
+		Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+		Rebing\GraphQL\GraphQLServiceProvider::class,
 
-    ],
+
+	],
 
     /*
     |--------------------------------------------------------------------------
@@ -226,6 +229,8 @@
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+		'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+		'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 		'GraphQL' => Rebing\GraphQL\Support\Facades\GraphQL::class,
 
     ],

@@ -1,7 +1,11 @@
 <?php
 
 
-use example\Mutation\ExampleMutation;
+	use App\GraphQL\Query\AllFilesQuery;
+	use App\GraphQL\Type\CommentType;
+	use App\GraphQL\Type\FileUploadType;
+	use App\GraphQL\Type\UserType;
+	use example\Mutation\ExampleMutation;
 use example\Query\ExampleQuery;
 use example\Type\ExampleRelationType;
 use example\Type\ExampleType;
@@ -100,10 +104,10 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
-                'example_query' => ExampleQuery::class,
+                'allFiles' => AllFilesQuery::class,
             ],
             'mutation' => [
-                'example_mutation'  => ExampleMutation::class,
+//                'example_mutation'  => ExampleMutation::class,
             ],
             'middleware' => [],
             'method' => ['get', 'post'],
@@ -120,8 +124,9 @@ return [
     // ]
     //
     'types' => [
-        'example'           => ExampleType::class,
-        'relation_example'  => ExampleRelationType::class,
+        UserType::class,
+		FileUploadType::class,
+		CommentType::class
     ],
 
     // This callable will be passed the Error object for each errors GraphQL catch.

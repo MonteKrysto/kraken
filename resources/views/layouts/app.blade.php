@@ -1,35 +1,30 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Kraken - Document Management</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Custom fonts for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <!-- Styles -->
-    <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
 
-    <!-- Grab Region Env Variable -->
-    <script>
-        localStorage.setItem('REGION', '{{ env('REGION', 'US') }}');
-    </script>
-</head>
-<body>
+        <!-- Fonts -->
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
-<div id="app">
-
-    @yield('content')
-
-</div>
-
-
-</body>
+        <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="app">
+            <main class="py-4">
+                @yield('content')
+            </main>
+        </div>
+    </body>
 </html>

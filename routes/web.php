@@ -13,3 +13,8 @@
 
 Route::get('/', 'HomeController@index')->name('home');
 
+// Any other route.  We want react router to pick it up
+Route::get('/{path?}', function(){
+	return view('home');
+})->where('path', '.*');
+
