@@ -18,7 +18,13 @@
         "laravel-mix": "^2.0",
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0"
+        "react": "^16.6.0",
+        "react-dom": "^16.6.0"
+    },
+    "dependencies": {
+        "react-redux": "^5.1.0",
+        "react-router-dom": "^4.3.1",
+        "redux": "^4.0.1",
+        "redux-thunk": "^2.3.0"
     }
 }
