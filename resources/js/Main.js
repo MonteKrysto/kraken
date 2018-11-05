@@ -8,13 +8,6 @@ import App from './components/App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 const store = configureStore();
 
-// store.subscribe(() => {
-//     // saveState(store.getState());
-//     saveState({
-//         updatedBadge: store.getState().updatedBadge
-//     });
-// });
-
 ReactDOM.render(
     <Router>
         <Provider store={store}>
