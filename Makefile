@@ -4,8 +4,7 @@ init:   ; bash vessel init
 
 migrate:    ; ./vessel art migrate
 
-run:
-    ./vessel start
+run:    ; ./vessel start
 
 
 
