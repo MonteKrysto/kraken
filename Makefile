@@ -2,7 +2,7 @@
 DATA_DIR		?= vesselmysql
 
 
-all: init run composer-install npm-install migrate npm-run-watch
+all: init run composer-install npm-install restart
 
 init:   ; bash vessel init
 
@@ -15,6 +15,12 @@ composer-install:   ; ./vessel composer install
 npm-install:    ; ./vessel npm install
 
 npm-run-watch:  ; ./vessel npm run watch
+
+migrate:	; ./vessel art migrate
+
+restart:	; ./vessel stop && ./vessel start
+
+watch:	; ./vesssel npm run watch
 
 # Bring the container down, unmount the volume and remove the database directory
 clean:
