@@ -1,4 +1,4 @@
-all: init run migrate composer-install npm-install npm-run-watch
+all: init run composer-install npm-install npm-run-watch migrate
 
 init:   ; bash vessel init
 
