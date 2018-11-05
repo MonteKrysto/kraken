@@ -1,0 +1,70 @@
+.data-sort {
+  position: sticky; /* For browsers that don't support sticky */
+  z-index: 1;
+  height: 47px;
+  background: #f5f8fa;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  width: 102%;
+}
+.data-sort:not(.ie) {
+  top: 0px;
+  position: sticky;
+  position: -webkit-sticky;
+}
+
+.list-files {
+  margin-top: 50px;
+}
+
+.double-carets {
+  display: inline-block;
+  vertical-align: text-top;
+}
+
+.data-sort:before {
+  content: '';
+  height: 1px;
+  width: 100%;
+  background: #c2c4c7;
+}
+
+.sort-menu {
+  height: 100%;
+}
+.sort-content {
+  padding: 18px 40px;
+}
+
+.sort_by_item {
+  cursor: pointer;
+}
+
+.data-sort .pull-left, .sort_by_item {
+  margin-right: 15px;
+}
+
+.sort-ascending:after {
+  content: "\2191";
+  margin-left: 6px;
+}
+
+.sort-descending:after {
+  content: "\2193";
+  margin-left: 6px;
+}
+
+.double-carets__element {
+  display: flex;
+  flex-direction: column;
+}
+
+.double-carets__element::before {
+  line-height: 0.6;
+}
+
+.double-carets__element-active {
+  color: #27b1ff;
+}
+
+

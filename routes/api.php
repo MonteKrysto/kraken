@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('/upload', 'UploadController@store');
+Route::get('/files', 'FileUploadsController@index');
+Route::delete('/file/{id}', 'FileUploadsController@destroy');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+

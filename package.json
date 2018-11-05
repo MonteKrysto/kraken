@@ -16,14 +16,19 @@
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^2.0",
-        "lodash": "^4.17.5",
+        "lodash": "^4.17.11",
         "popper.js": "^1.12",
         "react": "^16.6.0",
         "react-dom": "^16.6.0"
     },
     "dependencies": {
+        "prop-types": "^15.6.2",
+        "react-dropzone": "^7.0.1",
+        "react-modal": "^3.6.1",
         "react-redux": "^5.1.0",
         "react-router-dom": "^4.3.1",
+        "react-sliding-pane": "^3.0.1",
+        "reactstrap": "^6.5.0",
         "redux": "^4.0.1",
         "redux-thunk": "^2.3.0"
     }

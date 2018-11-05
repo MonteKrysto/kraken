@@ -1,0 +1,14 @@
+body {
+  background-color: #f5f8fa !important;
+}
+
+.sidebar {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 200px;
+  background-color: #6D7FB8;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.05);
+}
