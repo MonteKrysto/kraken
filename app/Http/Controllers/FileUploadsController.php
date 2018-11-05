@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\FileUploads;
+use App\Http\Resources\FileCollection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FileUploadsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
-     */
+     * @return FileCollection
+	 */
     public function index()
     {
-        //
+		return new FileCollection(FileUploads::all());
     }
 
     /**
@@ -72,14 +74,17 @@ class FileUploadsController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\FileUploads  $fileUploads
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(FileUploads $fileUploads)
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param Request $request
+	 * @param  \App\FileUploads $fileUploads
+	 * @return void
+	 */
+    public function destroy(Request $request, FileUploads $fileUploads)
     {
-        //
+        Log::info('delete '. $request->id);
+        return FileUploads::destroy($request->id);
+
     }
 }
