@@ -1,101 +1,88 @@
-import React, { Component, Fragment } from 'react'
-import { Container, Row, Col, CardDeck } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import File from './Files/File';
+import { Row, Col } from 'reactstrap';
+import DataTable from "./Datatable/DataTable";
+import Header from "./Header/Header";
+import {deleteFile, fetchFiles, resetSearch, searchAllFiles} from '../actions/actions';
 
 class MainContainer extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        this.props.getFiles()
+    }
+
+    deleteItem(id) {
+        this.props.deleteFile(id);
+    }
+
+    search(text) {
+        // this.props.searchFiles(text);
+    }
 
     render() {
+        const { allFiles, isFetching } = this.props;
+
+        if (isFetching && !allFiles.length) {
+            return <p>Loading...</p>;
+        }
 
         return (
             <Fragment>
+                {!allFiles.length &&
+                    <Row>
+                        <Col>
+                            <p>There have been no allFiles uploaded</p>
+                        </Col>
+                    </Row>
+                }
                 <Row>
                     <Col>
-                        <CardDeck>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                        <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                            <File/>
-                        </CardDeck>
+                        <Header
+                            searchText={(text) => this.search(text)}
+                        />
                     </Col>
                 </Row>
-            </Fragment>
+                <Row>
+                    <Col>
+                        {allFiles.length &&
+                            <DataTable
+                                data={allFiles}
+                                deleteItem={(id) => this.deleteItem(id)}
+                            />
+                        }
+                    </Col>
+                </Row>
+          </Fragment>
         )
 
     }
 
 }
-//
-// const mapStateToProps = state => {
-//     const
-// }
-// export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
 
-export default MainContainer;
+
+const mapStateToProps = state => {
+    const {
+        allFiles,
+        isFetching
+    } = state;
+
+    return {
+        allFiles,
+        isFetching,
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        sortBy: (col) => console.log(col),
+        getFiles: () => dispatch(fetchFiles()),
+        deleteFile: (id) => dispatch(deleteFile(id)),
+        searchFiles: (text) => dispatch(searchAllFiles(text)),
+        resetSearch: () => dispatch(resetSearch())
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+
