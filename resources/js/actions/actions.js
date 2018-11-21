@@ -69,10 +69,7 @@ export const resetSearch = () => ({
     type: 'RESET_SEARCH'
 });
 
-export const sortFiles = col => {
-    console.log('in sortFiles col =- ', col)
-    return {
-        type: 'SORT_FILES',
-        sortKey: col
-    }
-}
+export const sortFiles = col => ({
+    type: 'SORT_FILES',
+    sortKey: col
+});

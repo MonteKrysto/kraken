@@ -79,7 +79,7 @@ class FileUploadsController extends Controller
 	 *
 	 * @param Request $request
 	 * @param  \App\FileUploads $fileUploads
-	 * @return void
+	 * @return int
 	 */
     public function destroy(Request $request, FileUploads $fileUploads)
     {

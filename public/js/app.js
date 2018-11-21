@@ -40956,7 +40956,6 @@ var resetSearch = function resetSearch() {
 };
 
 var sortFiles = function sortFiles(col) {
-    console.log('in sortFiles col =- ', col);
     return {
         type: 'SORT_FILES',
         sortKey: col
@@ -71381,32 +71380,28 @@ var allFiles = function allFiles() {
 
     switch (action.type) {
         case 'FETCH_FILES_SUCCESS':
-            window.files = _extends({}, state, {
-                files: action.response.data.files,
-                sortKey: 'file',
-                sortOrder: 'asc'
-            });
             return _extends({}, state, {
                 files: action.response.data.files,
                 sortKey: 'file',
                 sortOrder: 'asc'
             });
         case 'ADD_FILE_SUCCESS':
-            return state.files.concat(action.response.data.files);
+            return _extends({}, state, {
+                files: state.files.concat(action.response.data.files)
+            });
         case 'DELETE_FILE_SUCCESS':
-            return state.files.filter(function (e) {
-                return e.id !== action.id;
+            return _extends({}, state, {
+                files: state.files.filter(function (e) {
+                    return e.id !== action.id;
+                })
             });
         case 'SEARCH_FILES':
-            console.log('in search files text = ', action.text.toLowerCase());
-            // return action.text.length > 0 ? state.files.filter(f => f.file.toLowerCase().includes(action.text.toLowerCase())) : state;
             return _extends({}, state, {
                 files: action.text.length > 0 ? state.files.filter(function (f) {
                     return f.file.toLowerCase().includes(action.text.toLowerCase());
                 }) : state.files
             });
         case 'SORT_FILES':
-            console.log('in sort_files');
             var sortKey = action.sortKey || 'file';
 
             if (sortKey === state.sortKey) {
@@ -71686,8 +71681,7 @@ var MainContainer = function (_Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react__["Fragment"],
                 null,
-                !Object(__WEBPACK_IMPORTED_MODULE_6__utils_helpers__["a" /* digIn */])(['files'], allFiles, []).length && //!allFiles && !allFiles.files && !allFiles.files.length &&
-                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                !Object(__WEBPACK_IMPORTED_MODULE_6__utils_helpers__["a" /* digIn */])(['files'], allFiles, []).length && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     __WEBPACK_IMPORTED_MODULE_2_reactstrap__["g" /* Row */],
                     null,
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -71719,8 +71713,7 @@ var MainContainer = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_2_reactstrap__["b" /* Col */],
                         null,
-                        Object(__WEBPACK_IMPORTED_MODULE_6__utils_helpers__["a" /* digIn */])(['files'], allFiles, []).length && //allFiles && allFiles.files && allFiles.files.length &&
-                        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Datatable_DataTable__["a" /* default */], {
+                        Object(__WEBPACK_IMPORTED_MODULE_6__utils_helpers__["a" /* digIn */])(['files'], allFiles, []).length && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Datatable_DataTable__["a" /* default */], {
                             data: allFiles.files,
                             deleteItem: function deleteItem(id) {
                                 return _this2.deleteItem(id);
@@ -72984,28 +72977,6 @@ var DataTable = function (_Component) {
 
 
 
-
-// class DataRow extends Component {
-//
-//     render() {
-//
-//         return (
-//             <li className="row datarow">
-//                 <div className="col-3">File 1</div>
-//                 <div className="col-3">3-10-18</div>
-//                 <div className="col-3">5-10-18</div>
-//                 <div className="col-3">
-//                     <Button color="primary">View</Button>
-//                     <Button color="danger">Delete</Button>
-//                 </div>
-//             </li>
-//         )
-//
-//     }
-//
-// }
-//
-// export default DataRow
 
 var DataRow = function DataRow(_ref) {
     var id = _ref.id,

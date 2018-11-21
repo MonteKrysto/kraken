@@ -32,7 +32,7 @@ class MainContainer extends Component {
 
         return (
             <Fragment>
-                { !digIn(['files'], allFiles, []).length &&  //!allFiles && !allFiles.files && !allFiles.files.length &&
+                { !digIn(['files'], allFiles, []).length &&
                     <Row>
                         <Col>
                             <p>There have been no files uploaded</p>
@@ -48,7 +48,7 @@ class MainContainer extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        { digIn(['files'], allFiles, []).length && //allFiles && allFiles.files && allFiles.files.length &&
+                        { digIn(['files'], allFiles, []).length &&
                             <DataTable
                                 data={allFiles.files}
                                 deleteItem={(id) => this.deleteItem(id)}
