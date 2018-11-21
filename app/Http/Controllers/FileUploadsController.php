@@ -83,7 +83,6 @@ class FileUploadsController extends Controller
 	 */
     public function destroy(Request $request, FileUploads $fileUploads)
     {
-        Log::info('delete '. $request->id);
         return FileUploads::destroy($request->id);
 
     }

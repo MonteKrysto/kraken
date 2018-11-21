@@ -33,13 +33,13 @@ class DataTable extends Component {
                     className="list-files"
                     items={[
                         {
-                            key: 'title',
+                            key: 'file',
                             label: 'File',
                             cols: 3,
                             className: 'sort-menu__title'
                         },
                         {
-                            key: 'upload',
+                            key: 'created',
                             label: 'Uploaded',
                             cols: 2,
                             className: 'sort-menu__status hide-mobile'

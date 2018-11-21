@@ -17,7 +17,6 @@ class FileUploadService
 				'size' => $file->getClientSize()
 			]);
 		}
-		Log::info('saved = ' .json_encode($savedFiles));
 		return $savedFiles;
 	}
 }

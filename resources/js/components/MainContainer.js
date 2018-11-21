@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Row, Col } from 'reactstrap';
 import DataTable from "./Datatable/DataTable";
 import Header from "./Header/Header";
-import {deleteFile, fetchFiles, resetSearch, searchAllFiles} from '../actions/actions';
+import {deleteFile, fetchFiles, resetSearch, searchAllFiles, sortFiles} from '../actions/actions';
+import { digIn } from "../utils/helpers";
 
 class MainContainer extends Component {
     constructor(props) {
@@ -19,11 +20,11 @@ class MainContainer extends Component {
     }
 
     search(text) {
-        // this.props.searchFiles(text);
+        this.props.searchFiles(text);
     }
 
     render() {
-        const { allFiles, isFetching } = this.props;
+        const { allFiles, isFetching, sortBy } = this.props;
 
         if (isFetching && !allFiles.length) {
             return <p>Loading...</p>;
@@ -31,10 +32,10 @@ class MainContainer extends Component {
 
         return (
             <Fragment>
-                {!allFiles.length &&
+                { !digIn(['files'], allFiles, []).length &&  //!allFiles && !allFiles.files && !allFiles.files.length &&
                     <Row>
                         <Col>
-                            <p>There have been no allFiles uploaded</p>
+                            <p>There have been no files uploaded</p>
                         </Col>
                     </Row>
                 }
@@ -47,10 +48,11 @@ class MainContainer extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        {allFiles.length &&
+                        { digIn(['files'], allFiles, []).length && //allFiles && allFiles.files && allFiles.files.length &&
                             <DataTable
-                                data={allFiles}
+                                data={allFiles.files}
                                 deleteItem={(id) => this.deleteItem(id)}
+                                sortBy={field => sortBy(field)}
                             />
                         }
                     </Col>
@@ -77,7 +79,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        sortBy: (col) => console.log(col),
+        sortBy: (col) => dispatch(sortFiles(col)),
         getFiles: () => dispatch(fetchFiles()),
         deleteFile: (id) => dispatch(deleteFile(id)),
         searchFiles: (text) => dispatch(searchAllFiles(text)),
