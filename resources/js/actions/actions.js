@@ -18,13 +18,11 @@ export const fetchFiles = () => {
 export const deleteFile = id => {
     return async dispatch => {
         try {
-            console.log('delete ', id)
             const response = await fetch(`/api/file/${id}`, {method: 'DELETE'});
             let data = await response.json();
-            console.log('data = ', data)
             dispatch(removeFile(id));
         } catch (e) {
-            console.log('could not deltee file ', e)
+            console.log('could not delete file ', e)
         }
     }
 };
@@ -69,4 +67,9 @@ export const searchAllFiles = text => ({
 
 export const resetSearch = () => ({
     type: 'RESET_SEARCH'
+});
+
+export const sortFiles = col => ({
+    type: 'SORT_FILES',
+    sortKey: col
 });

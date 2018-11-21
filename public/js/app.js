@@ -40707,7 +40707,7 @@ var SortBar = function SortBar(props) {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'section',
         {
-            className: Object(__WEBPACK_IMPORTED_MODULE_3__utils_helpers__["a" /* makeClassName */])(['sortBar data-sort', props.className])
+            className: Object(__WEBPACK_IMPORTED_MODULE_3__utils_helpers__["b" /* makeClassName */])(['sortBar data-sort', props.className])
         },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             'div',
@@ -40767,6 +40767,7 @@ var SortBar = function SortBar(props) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return saveFiles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return searchAllFiles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return resetSearch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return sortFiles; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
@@ -40835,36 +40836,33 @@ var deleteFile = function deleteFile(id) {
                     switch (_context2.prev = _context2.next) {
                         case 0:
                             _context2.prev = 0;
-
-                            console.log('delete ', id);
-                            _context2.next = 4;
+                            _context2.next = 3;
                             return fetch('/api/file/' + id, { method: 'DELETE' });
 
-                        case 4:
+                        case 3:
                             response = _context2.sent;
-                            _context2.next = 7;
+                            _context2.next = 6;
                             return response.json();
 
-                        case 7:
+                        case 6:
                             data = _context2.sent;
 
-                            console.log('data = ', data);
                             dispatch(removeFile(id));
-                            _context2.next = 15;
+                            _context2.next = 13;
                             break;
 
-                        case 12:
-                            _context2.prev = 12;
+                        case 10:
+                            _context2.prev = 10;
                             _context2.t0 = _context2['catch'](0);
 
-                            console.log('could not deltee file ', _context2.t0);
+                            console.log('could not delete file ', _context2.t0);
 
-                        case 15:
+                        case 13:
                         case 'end':
                             return _context2.stop();
                     }
                 }
-            }, _callee2, _this, [[0, 12]]);
+            }, _callee2, _this, [[0, 10]]);
         }));
 
         return function (_x2) {
@@ -40954,6 +40952,13 @@ var searchAllFiles = function searchAllFiles(text) {
 var resetSearch = function resetSearch() {
     return {
         type: 'RESET_SEARCH'
+    };
+};
+
+var sortFiles = function sortFiles(col) {
+    return {
+        type: 'SORT_FILES',
+        sortKey: col
     };
 };
 
@@ -71366,30 +71371,53 @@ var rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["c" /* combineReduc
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return allFiles; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isFetching; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isUploading; });
+/* unused harmony export isSorting */
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var allFiles = function allFiles() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var action = arguments[1];
 
     switch (action.type) {
         case 'FETCH_FILES_SUCCESS':
-            return action.response.data.files;
+            return _extends({}, state, {
+                files: action.response.data.files,
+                sortKey: 'file',
+                sortOrder: 'asc'
+            });
         case 'ADD_FILE_SUCCESS':
-            return state.concat(action.response.data.files);
+            return _extends({}, state, {
+                files: state.files.concat(action.response.data.files)
+            });
         case 'DELETE_FILE_SUCCESS':
-            return state.filter(function (e) {
-                return e.id !== action.id;
+            return _extends({}, state, {
+                files: state.files.filter(function (e) {
+                    return e.id !== action.id;
+                })
             });
         case 'SEARCH_FILES':
-            console.log('in search files reducer', action);
-            // return Object.assign([], state, [
-            //     state.filter(f => f.file.toLowerCase().includes(action.text.toLowerCase()))
-            // ]);
-            // console.log('state now is ', state)
-            return state.filter(function (f) {
-                return f.file.toLowerCase().includes(action.text.toLowerCase());
+            return _extends({}, state, {
+                files: action.text.length > 0 ? state.files.filter(function (f) {
+                    return f.file.toLowerCase().includes(action.text.toLowerCase());
+                }) : state.files
             });
+        case 'SORT_FILES':
+            var sortKey = action.sortKey || 'file';
+
+            if (sortKey === state.sortKey) {
+                state.sortOrder = state.sortOrder === 'asc' ? 'desc' : 'asc';
+            }
+
+            return {
+                files: state.files.sort(function (a, b) {
+                    if (a[sortKey] < b[sortKey]) return state.sortOrder === 'asc' ? -1 : 1;
+                    if (a[sortKey] > b[sortKey]) return state.sortOrder === 'asc' ? 1 : -1;
+                    return 0;
+                }),
+                sortKey: sortKey,
+                sortOrder: state.sortOrder
+            };
         case 'RESET_SEARCH':
-            console.log('resetting', state);
         default:
             return state;
     }
@@ -71422,6 +71450,30 @@ var isUploading = function isUploading() {
             return false;
         default:
             return state;
+    }
+};
+
+var isSorting = function isSorting() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { sortKey: 'file', sortOrder: 'asc' };
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'SORT':
+            var sortKey = action.sortKey || 'file';
+
+            if (sortKey === state.sortKey) {
+                state.sortOrder = state.sortOrder === 'asc' ? 'desc' : 'asc';
+            }
+
+            return {
+                bizzes: List(state.bizzes.sort(function (a, b) {
+                    if (a[sortKey] < b[sortKey]) return state.sortOrder === 'asc' ? -1 : 1;
+                    if (a[sortKey] > b[sortKey]) return state.sortOrder === 'asc' ? 1 : -1;
+                    return 0;
+                })),
+                sortKey: sortKey,
+                sortOrder: state.sortOrder
+            };
     }
 };
 
@@ -71566,6 +71618,7 @@ var Routes = function (_Component) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Datatable_DataTable__ = __webpack_require__(141);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Header_Header__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions_actions__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_helpers__ = __webpack_require__(148);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71573,6 +71626,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -71603,7 +71657,7 @@ var MainContainer = function (_Component) {
     }, {
         key: 'search',
         value: function search(text) {
-            // this.props.searchFiles(text);
+            this.props.searchFiles(text);
         }
     }, {
         key: 'render',
@@ -71612,7 +71666,8 @@ var MainContainer = function (_Component) {
 
             var _props = this.props,
                 allFiles = _props.allFiles,
-                isFetching = _props.isFetching;
+                isFetching = _props.isFetching,
+                _sortBy = _props.sortBy;
 
 
             if (isFetching && !allFiles.length) {
@@ -71626,7 +71681,7 @@ var MainContainer = function (_Component) {
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 __WEBPACK_IMPORTED_MODULE_0_react__["Fragment"],
                 null,
-                !allFiles.length && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                !Object(__WEBPACK_IMPORTED_MODULE_6__utils_helpers__["a" /* digIn */])(['files'], allFiles, []).length && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     __WEBPACK_IMPORTED_MODULE_2_reactstrap__["g" /* Row */],
                     null,
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -71635,7 +71690,7 @@ var MainContainer = function (_Component) {
                         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                             'p',
                             null,
-                            'There have been no allFiles uploaded'
+                            'There have been no files uploaded'
                         )
                     )
                 ),
@@ -71658,10 +71713,13 @@ var MainContainer = function (_Component) {
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         __WEBPACK_IMPORTED_MODULE_2_reactstrap__["b" /* Col */],
                         null,
-                        allFiles.length && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Datatable_DataTable__["a" /* default */], {
-                            data: allFiles,
+                        Object(__WEBPACK_IMPORTED_MODULE_6__utils_helpers__["a" /* digIn */])(['files'], allFiles, []).length && __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__Datatable_DataTable__["a" /* default */], {
+                            data: allFiles.files,
                             deleteItem: function deleteItem(id) {
                                 return _this2.deleteItem(id);
+                            },
+                            sortBy: function sortBy(field) {
+                                return _sortBy(field);
                             }
                         })
                     )
@@ -71687,7 +71745,7 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         sortBy: function sortBy(col) {
-            return console.log(col);
+            return dispatch(Object(__WEBPACK_IMPORTED_MODULE_5__actions_actions__["f" /* sortFiles */])(col));
         },
         getFiles: function getFiles() {
             return dispatch(Object(__WEBPACK_IMPORTED_MODULE_5__actions_actions__["b" /* fetchFiles */])());
@@ -72865,12 +72923,12 @@ var DataTable = function (_Component) {
                     onSort: sortBy,
                     className: 'list-files',
                     items: [{
-                        key: 'title',
+                        key: 'file',
                         label: 'File',
                         cols: 3,
                         className: 'sort-menu__title'
                     }, {
-                        key: 'upload',
+                        key: 'created',
                         label: 'Uploaded',
                         cols: 2,
                         className: 'sort-menu__status hide-mobile'
@@ -72919,28 +72977,6 @@ var DataTable = function (_Component) {
 
 
 
-
-// class DataRow extends Component {
-//
-//     render() {
-//
-//         return (
-//             <li className="row datarow">
-//                 <div className="col-3">File 1</div>
-//                 <div className="col-3">3-10-18</div>
-//                 <div className="col-3">5-10-18</div>
-//                 <div className="col-3">
-//                     <Button color="primary">View</Button>
-//                     <Button color="danger">Delete</Button>
-//                 </div>
-//             </li>
-//         )
-//
-//     }
-//
-// }
-//
-// export default DataRow
 
 var DataRow = function DataRow(_ref) {
     var id = _ref.id,
@@ -73182,7 +73218,10 @@ exports.push([module.i, ".data-sort {\n  position: sticky;\n  /* For browsers th
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return makeClassName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return makeClassName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return digIn; });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 /**
  * Turn an array of strings into a class name, omitting empty values.
  *
@@ -73190,9 +73229,79 @@ exports.push([module.i, ".data-sort {\n  position: sticky;\n  /* For browsers th
  * @return {string}
  */
 var makeClassName = function makeClassName(a) {
-  return (Array.isArray(a) ? a : [a]).filter(function (c) {
-    return c;
-  }).join(' ');
+    return (Array.isArray(a) ? a : [a]).filter(function (c) {
+        return c;
+    }).join(' ');
+};
+
+/**
+ * Safely traverse nested object and returns item indicated at end of path
+ * Examples:
+ *
+ * Example Object:
+ * let obj = {
+ *      one: {
+ *          two: {
+ *              three: [
+ *                  {id: 1, name: "test1"},
+ *                  {id: 2, name: "test2"}
+ *              ]
+  *         }
+  *     }
+  *  }
+ *
+ * let r = digIn(['one', 'two', 'three'], obj, {})
+ * Returns: [ {id: 1, name: "test1"}, {id: 2, name: "test2"} ]
+ *
+ * Ex 2: let s = digIn(['one', 'two', 'three', 1], obj, {})
+ * Returns: {id: 2, name: "test2"}
+ *
+ * Ex 3: let t = digIn(['one', 'two', 'three', 1, 'name'], obj, {})
+ * Returns: "test"
+ *
+ * Ex 4: let u = digIn(['one', 'two', 'three', 'four'], obj, {})
+ * Returns: {} - item four does not exist
+ *
+ * Ex 5: let v = digIn(['one', 'two', 'three', 1, 'age'], obj, [])
+ * Returns: [] - no such key 'age'
+ *
+ * @param {Array} path - the nested path to the item you wish to return
+ * @param {Object} obj - the object to check against
+ * @param {*=null} defaultReturn - what to return if item is not found
+ * @returns {*}
+ */
+var digIn = function digIn(path, obj) {
+    var defaultReturn = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = path[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var key = _step.value;
+
+            if (obj && ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) == 'object' || Array.isArray(obj)) && key in obj) {
+                obj = obj[key];
+            } else {
+                return defaultReturn;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return obj;
 };
 
 /***/ }),

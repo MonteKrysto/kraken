@@ -17,12 +17,10 @@ class UploadController extends Controller
 			if($request->hasFile('file'))
 			{
 				$res = $uploader->process($request->file('file'));
-				Log::info('controller');
 			}
 		} catch (Exception $e) {
 			return response()->json(['message' => $e->getMessage()], $e->getCode());
 		}
-//		return response()->json(['data' => ['files' =>$res]], 200);
 		return new FileCollection(collect($res));
 	}
 }
